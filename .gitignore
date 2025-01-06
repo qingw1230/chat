@@ -370,6 +370,3 @@ dist
 .idea.md
 .todo.md
 .note.md
-
-# config files, may contain sensitive informatio
-config/config.yaml
