@@ -39,9 +39,10 @@ func (o *Account) Create(ctx context.Context, accounts ...*chat.Account) error {
 	return errs.Wrap(o.db.WithContext(ctx).Create(&accounts).Error)
 }
 
-func (o *Account) Take(ctx context.Context, userId string) (*chat.Account, error) {
+// Take 根据 userID 获取密码
+func (o *Account) Take(ctx context.Context, userID string) (*chat.Account, error) {
 	var a chat.Account
-	return &a, errs.Wrap(o.db.WithContext(ctx).Where("user_id = ?", userId).First(&a).Error)
+	return &a, errs.Wrap(o.db.WithContext(ctx).Where("user_id = ?", userID).First(&a).Error)
 }
 
 func (o *Account) Update(ctx context.Context, userID string, data map[string]any) error {

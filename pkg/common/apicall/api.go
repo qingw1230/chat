@@ -22,11 +22,11 @@ import (
 	"github.com/OpenIMSDK/protocol/user"
 )
 
+// imApi 获取 IM server ip port
 func imApi() string {
 	return config.Config.OpenIMUrl
 }
 
-// im caller.
 var (
 	importFriend      = NewApiCaller[friend.ImportFriendReq, friend.ImportFriendResp]("/friend/import_friend", imApi)
 	userToken         = NewApiCaller[auth.UserTokenReq, auth.UserTokenResp]("/auth/user_token", imApi)

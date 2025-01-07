@@ -62,6 +62,7 @@ func (o *Attribute) Search(ctx context.Context, keyword string, genders []int32,
 	return ormutil.GormSearch[chat.Attribute](db, []string{"user_id", "account", "nickname", "phone_number"}, keyword, page, size)
 }
 
+// TakePhone 根据手机号获取用户属性
 func (o *Attribute) TakePhone(ctx context.Context, areaCode string, phoneNumber string) (*chat.Attribute, error) {
 	var a chat.Attribute
 	return &a, errs.Wrap(o.db.WithContext(ctx).Where("area_code = ? and phone_number = ?", areaCode, phoneNumber).First(&a).Error)

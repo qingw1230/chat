@@ -414,7 +414,6 @@ func (o *chatSvr) RegisterUser(ctx context.Context, req *chat.RegisterUserReq) (
 }
 
 func (o *chatSvr) Login(ctx context.Context, req *chat.LoginReq) (*chat.LoginResp, error) {
-	defer log.ZDebug(ctx, "return")
 	resp := &chat.LoginResp{}
 	if req.Password == "" && req.VerifyCode == "" {
 		return nil, errs.ErrArgs.Wrap("password or code must be set")
@@ -463,6 +462,7 @@ func (o *chatSvr) Login(ctx context.Context, req *chat.LoginReq) (*chat.LoginRes
 		}
 		verifyCodeID = &id
 	} else {
+		// 从数据库获取密码并验证是否正确
 		account, err := o.Database.GetAccount(ctx, attribute.UserID)
 		if err != nil {
 			return nil, err
@@ -484,11 +484,6 @@ func (o *chatSvr) Login(ctx context.Context, req *chat.LoginReq) (*chat.LoginRes
 	}
 	if err := o.Database.LoginRecord(ctx, record, verifyCodeID); err != nil {
 		return nil, err
-	}
-	if verifyCodeID != nil {
-		if err := o.Database.DelVerifyCode(ctx, *verifyCodeID); err != nil {
-			return nil, err
-		}
 	}
 	resp.UserID = attribute.UserID
 	resp.ChatToken = chatToken.Token

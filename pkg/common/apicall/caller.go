@@ -16,9 +16,10 @@ package apicall
 
 import (
 	"context"
-	"github.com/OpenIMSDK/tools/log"
 	"sync"
 	"time"
+
+	"github.com/OpenIMSDK/tools/log"
 
 	"github.com/OpenIMSDK/chat/pkg/common/config"
 	"github.com/OpenIMSDK/protocol/auth"
@@ -45,7 +46,7 @@ type CallerInterface interface {
 type Caller struct {
 	token   string
 	timeout time.Time
-	lock    sync.Mutex
+	mu      sync.Mutex
 }
 
 func NewCallerInterface() CallerInterface {
@@ -64,8 +65,8 @@ func (c *Caller) ImportFriend(ctx context.Context, ownerUserID string, friendUse
 }
 
 func (c *Caller) ImAdminTokenWithDefaultAdmin(ctx context.Context) (string, error) {
-	c.lock.Lock()
-	defer c.lock.Unlock()
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if c.token == "" || c.timeout.Before(time.Now()) {
 		userID := config.GetDefaultIMAdmin()
 		token, err := c.UserToken(ctx, config.GetDefaultIMAdmin(), constant.AdminPlatformID)

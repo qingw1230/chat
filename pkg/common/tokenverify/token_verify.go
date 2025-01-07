@@ -50,7 +50,7 @@ func buildClaims(userID string, userType int32, ttl int64) claims {
 }
 
 func CreateToken(UserID string, userType int32, ttl int64) (string, error) {
-	if !(userType == TokenUser || userType == TokenAdmin) {
+	if userType != TokenUser && userType != TokenAdmin {
 		return "", errs.ErrTokenUnknown.Wrap("token type unknown")
 	}
 	claims := buildClaims(UserID, userType, ttl)
